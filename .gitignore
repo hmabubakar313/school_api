@@ -1,0 +1,8 @@
+# ignore .env file in git
+echo ".env" >> .gitignore
+* .pyc
+*.cpython-36.pyc
+*.cpython-37.pyc
+*.env
+*.cpython-310.pyc
+
