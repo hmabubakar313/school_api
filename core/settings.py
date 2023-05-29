@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'livesync',
     'rest_framework',
     'school',
-    
+    'django_filters',
+
 
 ]
 
@@ -107,12 +108,15 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-
+    
 REST_FRAMEWORK = {'DEFAULT_SCHEMA_CLASS':'rest_framework.schemas.coreapi.AutoSchema' }
 
+
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 2,
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+       
+    ),
 }
 
 # Internationalization

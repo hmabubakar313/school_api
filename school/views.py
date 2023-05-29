@@ -7,6 +7,8 @@ from rest_framework_swagger.views import get_swagger_view
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
 from django.shortcuts import get_object_or_404
 from rest_framework import permissions
+from rest_framework.pagination import PageNumberPagination
+from django_filters import rest_framework as filters
 schema_view = get_swagger_view(title='School API')
 
 
@@ -14,11 +16,22 @@ schema_view = get_swagger_view(title='School API')
 
 
 class StudentViewSet(viewsets.ViewSet):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_fields = ('name', 'email')
+
+    
+    
+    # user pagination
     def list(self, request):
+        paginator = PageNumberPagination()
+        paginator.page_size = 5
         queryset = Student.objects.all()
-        serializer = StudentSerializer(queryset, many=True)
-        return Response(serializer.data)
+        result_page = paginator.paginate_queryset(queryset, request)
+        serializer = StudentSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)    
+   
+   
     def create(self, request):
         serializer = StudentSerializer(data=request.data)
         if serializer.is_valid():
@@ -52,10 +65,16 @@ class StudentViewSet(viewsets.ViewSet):
 
 class TeacherViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
-    def list(self,request):
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_fields = ('name', 'email')
+      # user pagination
+    def list(self, request):
+        paginator = PageNumberPagination()
+        paginator.page_size = 5
         queryset = Teacher.objects.all()
-        serializer = TeacherSerializer(queryset, many=True)
-        return Response(serializer.data)
+        result_page = paginator.paginate_queryset(queryset, request)
+        serializer = TeacherSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
     
     def create(self,request):
         serializer = TeacherSerializer(data=request.data)
@@ -88,10 +107,18 @@ class TeacherViewSet(viewsets.ViewSet):
 
 class CourseViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_fields = ('name', 'duration')
+    
+    
+    # user pagination
     def list(self,request):
+        paginator = PageNumberPagination()
+        paginator.page_size = 5
         queryset = Course.objects.all()
-        serializer = CourseSerializer(queryset, many=True)
-        return Response(serializer.data)
+        result_page = paginator.paginate_queryset(queryset, request)
+        serializer = CourseSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
     
     def create(self,request):
         serializers = CourseSerializer(data=request.data)
@@ -123,10 +150,17 @@ class CourseViewSet(viewsets.ViewSet):
 
 class GradeViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_fields = ('course', 'student')
+    
+    
     def list(self,request):
+        paginator = PageNumberPagination()
+        paginator.page_size = 5
         queryset = Grade.objects.all()
-        serializer = GradeSerializer(queryset, many=True)
-        return Response(serializer.data)
+        result_page = paginator.paginate_queryset(queryset, request)
+        serializer = GradeSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
     
     def create(self,request):
         serializer = GradeSerializer(data=request.data)
