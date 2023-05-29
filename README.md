@@ -4,7 +4,7 @@ This Django project provides an API for managing school-related data such as stu
 
 ## Prerequisites
 
-- Python 3.x installed on your machine
+- Python 3.10 installed on your machine
 - pip package manager
 
 ## Setup
@@ -80,6 +80,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 Make sure to create a requirements.txt file in your project root directory and list the required packages along with their versions. For example:
 
 Django==3.2.4
+
 djangorestframework==3.12.4
+
 django-filter==2.4.0
+
 drf-yasg==1.20.0
